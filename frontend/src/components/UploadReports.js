@@ -45,11 +45,18 @@ const UploadReports = ({ onUploadSuccess }) => {
     accept: {
       'application/pdf': ['.pdf'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'application/vnd.ms-excel': ['.xls']
+      'application/vnd.ms-excel': ['.xls'],
+      '.pdf': [],
+      '.xlsx': [],
+      '.xls': []
     },
     multiple: false,
     noClick: false,
-    noKeyboard: false
+    noKeyboard: false,
+    onDropRejected: (rejectedFiles) => {
+      console.log('Files rejected for 530:', rejectedFiles);
+      setError('Formato de arquivo não suportado. Use PDF ou Excel.');
+    }
   });
 
   const {
@@ -62,11 +69,18 @@ const UploadReports = ({ onUploadSuccess }) => {
     accept: {
       'application/pdf': ['.pdf'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'application/vnd.ms-excel': ['.xls']
+      'application/vnd.ms-excel': ['.xls'],
+      '.pdf': [],
+      '.xlsx': [],
+      '.xls': []
     },
     multiple: false,
     noClick: false,
-    noKeyboard: false
+    noKeyboard: false,
+    onDropRejected: (rejectedFiles) => {
+      console.log('Files rejected for 549:', rejectedFiles);
+      setError('Formato de arquivo não suportado. Use PDF ou Excel.');
+    }
   });
 
   const handleUpload = async () => {
