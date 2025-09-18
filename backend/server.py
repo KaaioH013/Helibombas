@@ -217,7 +217,11 @@ async def get_current_meta():
     """Get current meta configuration"""
     meta = await db.meta_configs.find().sort("created_at", -1).limit(1).to_list(1)
     if meta:
-        return meta[0]
+        # Remove _id field from MongoDB document to avoid serialization issues
+        meta_doc = meta[0]
+        if '_id' in meta_doc:
+            del meta_doc['_id']
+        return meta_doc
     return {"meta_value": 2200000.0}  # Default meta
 
 @api_router.post("/upload-reports")
