@@ -18,6 +18,9 @@ import { TrendingUp, TrendingDown, Users, Package, Target, Clock } from 'lucide-
 const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
   const [selectedMonth, setSelectedMonth] = useState('');
 
+  console.log('Dashboard rendered with analysis:', analysis);
+  console.log('Dashboard analyses list:', analyses);
+
   if (!analysis) {
     return (
       <div className="page-container">
