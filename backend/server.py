@@ -220,7 +220,8 @@ async def create_meta_config(input: MetaConfigCreate):
     """Configure meta target value"""
     meta_dict = input.dict()
     meta_obj = MetaConfig(**meta_dict)
-    await db.meta_configs.insert_one(meta_obj.dict())
+    meta_dict_for_mongo = prepare_for_mongo(meta_obj.dict())
+    await db.meta_configs.insert_one(meta_dict_for_mongo)
     return meta_obj
 
 @api_router.get("/meta-config")
