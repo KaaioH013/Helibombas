@@ -1,50 +1,90 @@
-import { useEffect } from "react";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import axios from 'axios';
+import './App.css';
+
+// Components
+import Dashboard from './components/Dashboard';
+import UploadReports from './components/UploadReports';
+import MetaConfig from './components/MetaConfig';
+import Navbar from './components/Navbar';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const Home = () => {
-  const helloWorldApi = async () => {
+function App() {
+  const [currentAnalysis, setCurrentAnalysis] = useState(null);
+  const [analyses, setAnalyses] = useState([]);
+  const [metaConfig, setMetaConfig] = useState({ meta_value: 2200000 });
+
+  useEffect(() => {
+    fetchAnalyses();
+    fetchMetaConfig();
+  }, []);
+
+  const fetchAnalyses = async () => {
     try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
+      const response = await axios.get(`${API}/analyses`);
+      setAnalyses(response.data);
+      if (response.data.length > 0) {
+        setCurrentAnalysis(response.data[0]);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar análises:', error);
     }
   };
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+  const fetchMetaConfig = async () => {
+    try {
+      const response = await axios.get(`${API}/meta-config`);
+      setMetaConfig(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar configuração de meta:', error);
+    }
+  };
 
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+  const handleUploadSuccess = (newAnalysis) => {
+    setCurrentAnalysis(newAnalysis);
+    fetchAnalyses();
+  };
 
-function App() {
+  const handleMetaUpdate = (newMeta) => {
+    setMetaConfig(newMeta);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
+        <Navbar />
         <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
+          <Route 
+            path="/" 
+            element={
+              <Dashboard 
+                analysis={currentAnalysis} 
+                metaConfig={metaConfig}
+                analyses={analyses}
+                onAnalysisSelect={setCurrentAnalysis}
+              />
+            } 
+          />
+          <Route 
+            path="/upload" 
+            element={
+              <UploadReports 
+                onUploadSuccess={handleUploadSuccess}
+              />
+            } 
+          />
+          <Route 
+            path="/meta" 
+            element={
+              <MetaConfig 
+                currentMeta={metaConfig}
+                onMetaUpdate={handleMetaUpdate}
+              />
+            } 
+          />
         </Routes>
       </BrowserRouter>
     </div>
