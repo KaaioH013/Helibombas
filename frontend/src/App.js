@@ -44,7 +44,9 @@ function App() {
   };
 
   const handleUploadSuccess = (newAnalysis) => {
+    console.log('handleUploadSuccess called with:', newAnalysis);
     setCurrentAnalysis(newAnalysis);
+    // Também atualizar a lista de análises
     fetchAnalyses();
   };
 
