@@ -308,11 +308,23 @@ const UploadReports = ({ onUploadSuccess }) => {
                   type="button"
                   onClick={open549}
                   className="btn btn-secondary"
-                  style={{ minWidth: '200px' }}
+                  style={{ minWidth: '200px', marginRight: '1rem' }}
                 >
                   <Upload size={20} />
                   Selecionar Relatório 549
                 </button>
+                <div style={{ marginTop: '1rem' }}>
+                  <label className="btn btn-primary" style={{ cursor: 'pointer' }}>
+                    <Upload size={16} style={{ marginRight: '0.5rem' }} />
+                    Backup - Selecionar Arquivo
+                    <input
+                      type="file"
+                      accept=".pdf,.xlsx,.xls"
+                      onChange={handleFileInput549}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                </div>
               </div>
             )}
           </div>
