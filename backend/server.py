@@ -74,14 +74,30 @@ def extract_pdf_data(file_content: bytes) -> Dict[str, Any]:
 def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
     """Extract data from Excel content"""
     try:
-        # Use pandas to read Excel data
-        df = pd.read_excel(file_content, sheet_name=None)  # Read all sheets
+        from io import BytesIO
+        # Use BytesIO to avoid deprecation warning
+        excel_buffer = BytesIO(file_content)
+        df = pd.read_excel(excel_buffer, sheet_name=None)  # Read all sheets
         
         # Convert all sheets to dictionary format
         data = {}
         for sheet_name, sheet_df in df.items():
-            # Convert to dict and handle NaN values
-            data[sheet_name] = sheet_df.fillna("").to_dict(orient='records')
+            # Convert to dict and handle NaN values and datetime objects
+            sheet_dict = sheet_df.fillna("").to_dict(orient='records')
+            # Convert any datetime objects to strings
+            processed_records = []
+            for record in sheet_dict:
+                processed_record = {}
+                for key, value in record.items():
+                    # Ensure key is string
+                    str_key = str(key)
+                    # Convert datetime values to strings
+                    if isinstance(value, pd.Timestamp) or hasattr(value, 'strftime'):
+                        processed_record[str_key] = value.strftime('%Y-%m-%d %H:%M:%S') if hasattr(value, 'strftime') else str(value)
+                    else:
+                        processed_record[str_key] = value
+                processed_records.append(processed_record)
+            data[sheet_name] = processed_records
         
         return {
             "sheets": data,
