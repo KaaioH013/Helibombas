@@ -90,6 +90,17 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
     except Exception as e:
         return {"error": str(e), "success": False}
 
+def prepare_for_mongo(data):
+    """Prepare data for MongoDB by converting datetime objects to ISO strings"""
+    if isinstance(data, dict):
+        return {k: prepare_for_mongo(v) for k, v in data.items()}
+    elif isinstance(data, list):
+        return [prepare_for_mongo(item) for item in data]
+    elif isinstance(data, datetime):
+        return data.isoformat()
+    else:
+        return data
+
 def generate_mock_chart_data() -> Dict[str, Any]:
     """Generate mock chart data for demonstration"""
     return {
