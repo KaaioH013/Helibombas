@@ -30,7 +30,8 @@ const UploadReports = ({ onUploadSuccess }) => {
   const {
     getRootProps: getRootProps530,
     getInputProps: getInputProps530,
-    isDragActive: isDragActive530
+    isDragActive: isDragActive530,
+    open: open530
   } = useDropzone({
     onDrop: onDrop530,
     accept: {
@@ -38,13 +39,16 @@ const UploadReports = ({ onUploadSuccess }) => {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
       'application/vnd.ms-excel': ['.xls']
     },
-    multiple: false
+    multiple: false,
+    noClick: false,
+    noKeyboard: false
   });
 
   const {
     getRootProps: getRootProps549,
     getInputProps: getInputProps549,
-    isDragActive: isDragActive549
+    isDragActive: isDragActive549,
+    open: open549
   } = useDropzone({
     onDrop: onDrop549,
     accept: {
@@ -52,7 +56,9 @@ const UploadReports = ({ onUploadSuccess }) => {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
       'application/vnd.ms-excel': ['.xls']
     },
-    multiple: false
+    multiple: false,
+    noClick: false,
+    noKeyboard: false
   });
 
   const handleUpload = async () => {
