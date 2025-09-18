@@ -14,16 +14,24 @@ const UploadReports = ({ onUploadSuccess }) => {
   const [error, setError] = useState(null);
 
   const onDrop530 = useCallback((acceptedFiles) => {
+    console.log('onDrop530 called with files:', acceptedFiles);
     if (acceptedFiles.length > 0) {
+      console.log('Setting report_530 file:', acceptedFiles[0]);
       setFiles(prev => ({ ...prev, report_530: acceptedFiles[0] }));
       setError(null);
+    } else {
+      console.log('No files accepted for report 530');
     }
   }, []);
 
   const onDrop549 = useCallback((acceptedFiles) => {
+    console.log('onDrop549 called with files:', acceptedFiles);
     if (acceptedFiles.length > 0) {
+      console.log('Setting report_549 file:', acceptedFiles[0]);
       setFiles(prev => ({ ...prev, report_549: acceptedFiles[0] }));
       setError(null);
+    } else {
+      console.log('No files accepted for report 549');
     }
   }, []);
 
