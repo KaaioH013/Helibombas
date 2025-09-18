@@ -108,12 +108,28 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
 
 def prepare_for_mongo(data):
     """Prepare data for MongoDB by converting datetime objects to ISO strings"""
+    import pandas as pd
+    import numpy as np
+    
     if isinstance(data, dict):
-        return {k: prepare_for_mongo(v) for k, v in data.items()}
+        # Ensure all keys are strings and process values
+        cleaned_dict = {}
+        for k, v in data.items():
+            str_key = str(k)  # Convert key to string
+            cleaned_dict[str_key] = prepare_for_mongo(v)
+        return cleaned_dict
     elif isinstance(data, list):
         return [prepare_for_mongo(item) for item in data]
     elif isinstance(data, datetime):
         return data.isoformat()
+    elif isinstance(data, pd.Timestamp):
+        return data.isoformat()
+    elif isinstance(data, np.datetime64):
+        return pd.Timestamp(data).isoformat()
+    elif pd.isna(data) or (hasattr(data, '__class__') and 'NaT' in str(data.__class__)):
+        return None
+    elif isinstance(data, (np.integer, np.floating)):
+        return data.item()  # Convert numpy types to native Python types
     else:
         return data
 
