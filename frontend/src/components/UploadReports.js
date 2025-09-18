@@ -128,7 +128,16 @@ const UploadReports = ({ onUploadSuccess }) => {
 
       setUploadResult(response.data);
       if (onUploadSuccess) {
-        onUploadSuccess(response.data);
+        // Criar o objeto de análise com a estrutura correta
+        const analysisData = {
+          id: response.data.analysis_id,
+          month_year: monthYear,
+          charts_data: response.data.charts_data,
+          ai_analysis: response.data.ai_analysis,
+          created_at: new Date().toISOString()
+        };
+        console.log('Calling onUploadSuccess with:', analysisData);
+        onUploadSuccess(analysisData);
       }
     } catch (err) {
       setError(err.response?.data?.detail || 'Erro ao fazer upload dos relatórios');
