@@ -206,6 +206,19 @@ const UploadReports = ({ onUploadSuccess }) => {
               file={files.report_530}
               reportName="Relatório 530"
             />
+            {!files.report_530 && (
+              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                <button
+                  type="button"
+                  onClick={open530}
+                  className="btn btn-secondary"
+                  style={{ minWidth: '200px' }}
+                >
+                  <Upload size={20} />
+                  Selecionar Relatório 530
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Upload Relatório 549 */}
@@ -218,6 +231,19 @@ const UploadReports = ({ onUploadSuccess }) => {
               file={files.report_549}
               reportName="Relatório 549"
             />
+            {!files.report_549 && (
+              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                <button
+                  type="button"
+                  onClick={open549}
+                  className="btn btn-secondary"
+                  style={{ minWidth: '200px' }}
+                >
+                  <Upload size={20} />
+                  Selecionar Relatório 549
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Botão de Upload */}
