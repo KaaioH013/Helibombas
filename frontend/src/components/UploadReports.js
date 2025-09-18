@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Upload, FileText, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 
