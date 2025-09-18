@@ -280,7 +280,9 @@ async def upload_reports(
             charts_data=charts_data
         )
         
-        await db.report_analyses.insert_one(analysis.dict())
+        # Prepare data for MongoDB (convert datetime objects to strings)
+        analysis_dict = prepare_for_mongo(analysis.dict())
+        await db.report_analyses.insert_one(analysis_dict)
         
         return {
             "message": "Relatórios processados com sucesso",
