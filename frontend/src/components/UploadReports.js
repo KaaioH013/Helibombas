@@ -8,6 +8,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const UploadReports = ({ onUploadSuccess }) => {
+  const navigate = useNavigate();
   const [files, setFiles] = useState({ report_530: null, report_549: null });
   const [monthYear, setMonthYear] = useState('');
   const [uploading, setUploading] = useState(false);
