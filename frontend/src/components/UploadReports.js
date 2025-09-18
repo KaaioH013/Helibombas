@@ -35,6 +35,27 @@ const UploadReports = ({ onUploadSuccess }) => {
     }
   }, []);
 
+  // Fallback file input handlers
+  const handleFileInput530 = (e) => {
+    const selectedFile = e.target.files[0];
+    console.log('File input 530 changed:', selectedFile);
+    if (selectedFile) {
+      console.log('Setting report_530 via input:', selectedFile);
+      setFiles(prev => ({ ...prev, report_530: selectedFile }));
+      setError(null);
+    }
+  };
+
+  const handleFileInput549 = (e) => {
+    const selectedFile = e.target.files[0];
+    console.log('File input 549 changed:', selectedFile);
+    if (selectedFile) {
+      console.log('Setting report_549 via input:', selectedFile);
+      setFiles(prev => ({ ...prev, report_549: selectedFile }));
+      setError(null);
+    }
+  };
+
   const {
     getRootProps: getRootProps530,
     getInputProps: getInputProps530,
