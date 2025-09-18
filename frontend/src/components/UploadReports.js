@@ -375,13 +375,17 @@ const UploadReports = ({ onUploadSuccess }) => {
                 <p style={{ marginBottom: '1.5rem' }}>
                   {uploadResult.message}
                 </p>
-                <a href="/" className="btn" style={{ 
-                  background: 'white', 
-                  color: 'var(--success-color)',
-                  fontWeight: '600'
-                }}>
+                <button
+                  onClick={() => navigate('/')}
+                  className="btn" 
+                  style={{ 
+                    background: 'white', 
+                    color: 'var(--success-color)',
+                    fontWeight: '600'
+                  }}
+                >
                   Ver Dashboard
-                </a>
+                </button>
               </div>
             </div>
           )}
