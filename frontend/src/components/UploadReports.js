@@ -99,9 +99,18 @@ const UploadReports = ({ onUploadSuccess }) => {
     <div
       {...getRootProps()}
       className={`upload-area ${isDragActive ? 'active' : ''}`}
-      style={{ marginBottom: '1rem' }}
+      style={{ 
+        marginBottom: '1rem',
+        cursor: 'pointer',
+        border: '2px dashed var(--border-color)',
+        borderRadius: '12px',
+        padding: '3rem 2rem',
+        textAlign: 'center',
+        background: isDragActive ? 'rgba(90, 155, 92, 0.1)' : 'var(--background-light)',
+        transition: 'all 0.3s ease'
+      }}
     >
-      <input {...getInputProps()} />
+      <input {...getInputProps()} style={{ display: 'none' }} />
       <div style={{ textAlign: 'center' }}>
         {file ? (
           <div>
@@ -112,6 +121,29 @@ const UploadReports = ({ onUploadSuccess }) => {
             <p style={{ color: 'var(--text-secondary)' }}>
               {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
             </p>
+            <button 
+              type="button"
+              style={{
+                marginTop: '1rem',
+                padding: '0.5rem 1rem',
+                background: 'var(--primary-color)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                // Reset file by calling the appropriate onDrop function
+                if (reportName.includes('530')) {
+                  setFiles(prev => ({ ...prev, report_530: null }));
+                } else {
+                  setFiles(prev => ({ ...prev, report_549: null }));
+                }
+              }}
+            >
+              Alterar Arquivo
+            </button>
           </div>
         ) : (
           <div>
@@ -120,7 +152,7 @@ const UploadReports = ({ onUploadSuccess }) => {
               {isDragActive ? `Solte o ${reportName} aqui` : `Carregar ${reportName}`}
             </h3>
             <p style={{ color: 'var(--text-secondary)' }}>
-              Arraste e solte ou clique para selecionar
+              Arraste e solte ou <strong>clique aqui</strong> para selecionar
             </p>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
               Formatos aceitos: PDF, Excel (.xlsx, .xls)
