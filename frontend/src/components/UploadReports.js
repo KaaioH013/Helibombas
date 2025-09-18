@@ -205,6 +205,22 @@ const UploadReports = ({ onUploadSuccess }) => {
             </p>
           </div>
 
+          {/* Debug Info */}
+          {process.env.NODE_ENV === 'development' && (
+            <div style={{ 
+              background: '#f8f9fa', 
+              padding: '1rem', 
+              borderRadius: '8px', 
+              marginBottom: '1rem',
+              fontSize: '0.85rem',
+              color: '#666'
+            }}>
+              <strong>Debug Info:</strong><br/>
+              Report 530: {files.report_530 ? `${files.report_530.name} (${files.report_530.type})` : 'Não selecionado'}<br/>
+              Report 549: {files.report_549 ? `${files.report_549.name} (${files.report_549.type})` : 'Não selecionado'}
+            </div>
+          )}
+
           {/* Seleção do Período */}
           <div className="form-group">
             <label className="form-label">Período (Mês/Ano):</label>
