@@ -266,9 +266,18 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={charts_data.product_analysis}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="product" />
-                <YAxis tickFormatter={(value) => formatCurrency(value)} />
-                <Tooltip formatter={(value) => formatCurrency(value)} />
+                <XAxis dataKey="product" angle={-45} textAnchor="end" height={80} fontSize={12} />
+                <YAxis 
+                  tickFormatter={(value) => {
+                    if (value >= 1000000) return `R$ ${(value/1000000).toFixed(1)}M`;
+                    if (value >= 1000) return `R$ ${(value/1000).toFixed(0)}K`;
+                    return formatCurrency(value);
+                  }}
+                />
+                <Tooltip 
+                  formatter={(value, name) => [formatCurrency(value), name === 'revenue' ? 'Receita' : name]}
+                  labelFormatter={(label) => `Produto: ${label}`}
+                />
                 <Bar dataKey="revenue" fill="#5A9B5C" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
