@@ -443,15 +443,12 @@ async def upload_reports(
         else:
             report_549_data = extract_excel_data(report_549_content)
         
-        # Generate chart data (mock for now)
-        charts_data = generate_mock_chart_data()
-        
-        # Get current meta
+        # Generate chart data from REAL data instead of mock
         meta_config = await get_current_meta()
-        charts_data["performance_vs_meta"]["meta_target"] = meta_config["meta_value"]
-        charts_data["performance_vs_meta"]["percentage"] = (
-            charts_data["performance_vs_meta"]["current_performance"] / meta_config["meta_value"] * 100
-        )
+        meta_value = meta_config.get("meta_value", 2200000.0)
+        
+        # Process real data from uploaded files
+        charts_data = process_real_data(report_530_data, report_549_data, meta_value)
         
         # AI Analysis
         ai_analysis = await analyze_with_ai(report_530_data, report_549_data, charts_data)
