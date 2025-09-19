@@ -481,7 +481,9 @@ async def upload_reports(
         meta_value = meta_config.get("meta_value", 2200000.0)
         
         # Process real data from uploaded files
+        print(f"Processing real data - 530 success: {report_530_data.get('success')}, 549 success: {report_549_data.get('success')}")
         charts_data = process_real_data(report_530_data, report_549_data, meta_value)
+        print(f"Charts data generated: {charts_data.get('performance_vs_meta', {}).get('current_performance', 'N/A')}")
         
         # AI Analysis
         ai_analysis = await analyze_with_ai(report_530_data, report_549_data, charts_data)
