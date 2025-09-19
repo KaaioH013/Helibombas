@@ -108,6 +108,9 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
             "success": True
         }
     except Exception as e:
+        print(f"Error extracting Excel data: {e}")
+        import traceback
+        traceback.print_exc()
         return {"error": str(e), "success": False}
 
 def prepare_for_mongo(data):
