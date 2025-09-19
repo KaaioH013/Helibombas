@@ -83,7 +83,16 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
         data = {}
         for sheet_name, sheet_df in df.items():
             # First, rename any datetime columns to string
-            sheet_df.columns = [col.strftime('%Y-%m-%d %H:%M:%S') if hasattr(col, 'strftime') else str(col) for col in sheet_df.columns]
+            new_columns = []
+            for col in sheet_df.columns:
+                if hasattr(col, 'strftime'):
+                    try:
+                        new_columns.append(col.strftime('%Y-%m-%d %H:%M:%S'))
+                    except:
+                        new_columns.append(str(col))  # Fallback for NaT or other issues
+                else:
+                    new_columns.append(str(col))
+            sheet_df.columns = new_columns
             
             # Convert to dict and handle NaN values and datetime objects
             sheet_dict = sheet_df.fillna("").to_dict(orient='records')
