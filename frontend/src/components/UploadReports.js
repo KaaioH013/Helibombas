@@ -269,36 +269,51 @@ const UploadReports = ({ onUploadSuccess }) => {
           {/* Upload Relatório 530 */}
           <div className="form-group">
             <label className="form-label">Relatório 530 (Dados Oficiais):</label>
-            <DropzoneArea
-              getRootProps={getRootProps530}
-              getInputProps={getInputProps530}
-              isDragActive={isDragActive530}
-              file={files.report_530}
-              reportName="Relatório 530"
-            />
-            {!files.report_530 && (
-              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                <button
+            {files.report_530 ? (
+              <div className="card" style={{ 
+                background: 'linear-gradient(135deg, var(--success-color), #38a169)',
+                color: 'white',
+                textAlign: 'center',
+                padding: '2rem'
+              }}>
+                <CheckCircle size={48} style={{ marginBottom: '1rem' }} />
+                <h3 style={{ marginBottom: '0.5rem' }}>Relatório 530 Carregado</h3>
+                <p style={{ marginBottom: '1rem' }}>
+                  {files.report_530.name} ({(files.report_530.size / 1024 / 1024).toFixed(2)} MB)
+                </p>
+                <button 
                   type="button"
-                  onClick={open530}
-                  className="btn btn-secondary"
-                  style={{ minWidth: '200px', marginRight: '1rem' }}
+                  onClick={() => setFiles(prev => ({ ...prev, report_530: null }))}
+                  className="btn"
+                  style={{
+                    background: 'white',
+                    color: 'var(--success-color)',
+                    fontWeight: '600'
+                  }}
                 >
-                  <Upload size={20} />
-                  Selecionar Relatório 530
+                  Alterar Arquivo
                 </button>
-                <div style={{ marginTop: '1rem' }}>
-                  <label className="btn btn-primary" style={{ cursor: 'pointer' }}>
-                    <Upload size={16} style={{ marginRight: '0.5rem' }} />
-                    Backup - Selecionar Arquivo
-                    <input
-                      type="file"
-                      accept=".pdf,.xlsx,.xls"
-                      onChange={handleFileInput530}
-                      style={{ display: 'none' }}
-                    />
-                  </label>
-                </div>
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center' }}>
+                <label className="btn btn-primary" style={{ 
+                  cursor: 'pointer',
+                  minWidth: '300px',
+                  padding: '1rem 2rem',
+                  fontSize: '1.1rem'
+                }}>
+                  <Upload size={20} style={{ marginRight: '0.5rem' }} />
+                  Selecionar Relatório 530
+                  <input
+                    type="file"
+                    accept=".pdf,.xlsx,.xls"
+                    onChange={handleFileInput530}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+                <p style={{ marginTop: '1rem', color: 'var(--text-secondary)' }}>
+                  Formatos aceitos: PDF, Excel (.xlsx, .xls)
+                </p>
               </div>
             )}
           </div>
@@ -306,36 +321,51 @@ const UploadReports = ({ onUploadSuccess }) => {
           {/* Upload Relatório 549 */}
           <div className="form-group">
             <label className="form-label">Relatório 549 (Análises Detalhadas):</label>
-            <DropzoneArea
-              getRootProps={getRootProps549}
-              getInputProps={getInputProps549}
-              isDragActive={isDragActive549}
-              file={files.report_549}
-              reportName="Relatório 549"
-            />
-            {!files.report_549 && (
-              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                <button
+            {files.report_549 ? (
+              <div className="card" style={{ 
+                background: 'linear-gradient(135deg, var(--success-color), #38a169)',
+                color: 'white',
+                textAlign: 'center',
+                padding: '2rem'
+              }}>
+                <CheckCircle size={48} style={{ marginBottom: '1rem' }} />
+                <h3 style={{ marginBottom: '0.5rem' }}>Relatório 549 Carregado</h3>
+                <p style={{ marginBottom: '1rem' }}>
+                  {files.report_549.name} ({(files.report_549.size / 1024 / 1024).toFixed(2)} MB)
+                </p>
+                <button 
                   type="button"
-                  onClick={open549}
-                  className="btn btn-secondary"
-                  style={{ minWidth: '200px', marginRight: '1rem' }}
+                  onClick={() => setFiles(prev => ({ ...prev, report_549: null }))}
+                  className="btn"
+                  style={{
+                    background: 'white',
+                    color: 'var(--success-color)',
+                    fontWeight: '600'
+                  }}
                 >
-                  <Upload size={20} />
-                  Selecionar Relatório 549
+                  Alterar Arquivo
                 </button>
-                <div style={{ marginTop: '1rem' }}>
-                  <label className="btn btn-primary" style={{ cursor: 'pointer' }}>
-                    <Upload size={16} style={{ marginRight: '0.5rem' }} />
-                    Backup - Selecionar Arquivo
-                    <input
-                      type="file"
-                      accept=".pdf,.xlsx,.xls"
-                      onChange={handleFileInput549}
-                      style={{ display: 'none' }}
-                    />
-                  </label>
-                </div>
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center' }}>
+                <label className="btn btn-primary" style={{ 
+                  cursor: 'pointer',
+                  minWidth: '300px',
+                  padding: '1rem 2rem',
+                  fontSize: '1.1rem'
+                }}>
+                  <Upload size={20} style={{ marginRight: '0.5rem' }} />
+                  Selecionar Relatório 549
+                  <input
+                    type="file"
+                    accept=".pdf,.xlsx,.xls"
+                    onChange={handleFileInput549}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+                <p style={{ marginTop: '1rem', color: 'var(--text-secondary)' }}>
+                  Formatos aceitos: PDF, Excel (.xlsx, .xls)
+                </p>
               </div>
             )}
           </div>
