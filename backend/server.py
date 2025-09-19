@@ -136,13 +136,18 @@ def prepare_for_mongo(data):
 def process_real_data(report_530_data: Dict, report_549_data: Dict, meta_target: float) -> Dict[str, Any]:
     """Process real Helibombas data from reports 530 and 549"""
     try:
+        print(f"Processing real data - 530: {report_530_data.keys()}, 549: {report_549_data.keys()}")
+        
         # Extract data from report 530 (sheet1)
         data_530 = report_530_data.get('sheets', {}).get('sheet1', [])
+        print(f"Data 530 records: {len(data_530)}")
         
         # Extract data from report 549 (Planilha1) 
         data_549 = report_549_data.get('sheets', {}).get('Planilha1', [])
+        print(f"Data 549 records: {len(data_549)}")
         
         if not data_530 or not data_549:
+            print("No data found, using mock data")
             return generate_mock_chart_data()  # Fallback to mock data
         
         # Calculate real performance vs meta
