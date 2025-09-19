@@ -306,6 +306,11 @@ def process_real_data(report_530_data: Dict, report_549_data: Dict, meta_target:
         total_products = len(produtos_vendas) if produtos_vendas else 1
         avg_ticket = total_vendas_530 / total_clients if total_clients > 0 else 0
         
+        print(f"Total vendas from 530: {total_vendas_530}")
+        print(f"Number of clients: {len(clientes_vendas)}")
+        print(f"Number of products: {len(produtos_vendas)}")
+        print(f"Number of vendedores externos: {len(vendedores_externos)}")
+        
         return {
             "performance_vs_meta": {
                 "current_performance": total_vendas_530,
