@@ -574,6 +574,10 @@ async def get_analysis(analysis_id: str):
     analysis = await db.report_analyses.find_one({"id": analysis_id})
     if not analysis:
         raise HTTPException(status_code=404, detail="Análise não encontrada")
+    
+    # Remove _id field
+    if '_id' in analysis:
+        del analysis['_id']
     return analysis
 
 # Include the router in the main app
