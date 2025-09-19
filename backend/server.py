@@ -75,52 +75,45 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
     """Extract data from Excel content"""
     try:
         from io import BytesIO
-        # Use BytesIO to avoid deprecation warning
+        import pandas as pd
+        
+         # Use BytesIO to avoid deprecation warning
         excel_buffer = BytesIO(file_content)
-        df = pd.read_excel(excel_buffer, sheet_name=None)  # Read all sheets
+        df_dict = pd.read_excel(excel_buffer, sheet_name=None)  # Read all sheets
         
         # Convert all sheets to dictionary format
         data = {}
-        for sheet_name, sheet_df in df.items():
-            # First, rename any datetime columns to string
-            new_columns = []
+        for sheet_name, sheet_df in df_dict.items():
+            # Fix column names - handle datetime columns safely
+            fixed_columns = []
             for col in sheet_df.columns:
-                if hasattr(col, 'strftime'):
+                if pd.isna(col):
+                    fixed_columns.append("unnamed_column")
+                elif hasattr(col, 'strftime'):
                     try:
-                        new_columns.append(col.strftime('%Y-%m-%d %H:%M:%S'))
+                        fixed_columns.append(col.strftime('%Y-%m-%d_%H-%M-%S'))
                     except:
-                        new_columns.append(str(col))  # Fallback for NaT or other issues
+                        fixed_columns.append(f"datetime_col_{len(fixed_columns)}")
                 else:
-                    new_columns.append(str(col))
-            sheet_df.columns = new_columns
+                    fixed_columns.append(str(col))
             
-            # Convert to dict and handle NaN values and datetime objects
-            sheet_dict = sheet_df.fillna("").to_dict(orient='records')
-            # Convert any datetime objects to strings
-            processed_records = []
-            for record in sheet_dict:
-                processed_record = {}
-                for key, value in record.items():
-                    # Key should already be string at this point
-                    str_key = str(key)
-                    
-                    # Convert datetime values to strings
+            sheet_df.columns = fixed_columns
+            
+            # Convert to dict safely
+            records = []
+            for _, row in sheet_df.iterrows():
+                record = {}
+                for col_name, value in row.items():
+                    # Handle different value types safely
                     if pd.isna(value):
-                        processed_record[str_key] = ""
-                    elif isinstance(value, pd.Timestamp):
-                        try:
-                            processed_record[str_key] = value.strftime('%Y-%m-%d %H:%M:%S')
-                        except:
-                            processed_record[str_key] = str(value)
-                    elif hasattr(value, 'strftime'):
-                        try:
-                            processed_record[str_key] = value.strftime('%Y-%m-%d %H:%M:%S')
-                        except:
-                            processed_record[str_key] = str(value)
+                        record[col_name] = ""
+                    elif isinstance(value, (pd.Timestamp, pd._libs.tslibs.nattype.NaTType)):
+                        record[col_name] = str(value) if not pd.isna(value) else ""
                     else:
-                        processed_record[str_key] = value
-                processed_records.append(processed_record)
-            data[sheet_name] = processed_records
+                        record[col_name] = value
+                records.append(record)
+            
+            data[sheet_name] = records
         
         return {
             "sheets": data,
