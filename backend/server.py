@@ -383,28 +383,33 @@ async def analyze_with_ai(report_530_data: Dict, report_549_data: Dict, charts_d
             Seja específico e prático nas recomendações."""
         ).with_model("openai", "gpt-4o")
 
-        # Prepare analysis data
+        # Prepare analysis data with REAL values
         analysis_prompt = f"""
-        DADOS DE VENDAS HELIBOMBAS:
+        DADOS DE VENDAS REAIS HELIBOMBAS - JULHO 2025:
         
         Performance vs Meta: R$ {charts_data['performance_vs_meta']['current_performance']:,.2f} / R$ {charts_data['performance_vs_meta']['meta_target']:,.2f} ({charts_data['performance_vs_meta']['percentage']}%)
         
-        Distribuição Geográfica:
-        {json.dumps(charts_data['geographic_distribution'], indent=2, ensure_ascii=False)}
+        VENDEDORES EXTERNOS REAIS:
+        {format_sellers_for_ai(charts_data['external_sellers'])}
         
-        Vendedores Externos:
-        {json.dumps(charts_data['external_sellers'], indent=2, ensure_ascii=False)}
+        PRINCIPAIS CLIENTES REAIS:
+        {format_clients_for_ai(charts_data['main_clients'])}
         
-        Principais Clientes:
-        {json.dumps(charts_data['main_clients'], indent=2, ensure_ascii=False)}
+        DISTRIBUIÇÃO GEOGRÁFICA REAL:
+        {format_geography_for_ai(charts_data['geographic_distribution'])}
         
-        Análise de Produtos:
-        {json.dumps(charts_data['product_analysis'], indent=2, ensure_ascii=False)}
+        ANÁLISE DE PRODUTOS REAIS:
+        {format_products_for_ai(charts_data['product_analysis'])}
         
-        KPIs:
-        {json.dumps(charts_data['kpis'], indent=2, ensure_ascii=False)}
+        STATUS DE PRODUÇÃO:
+        - Finalizados: {charts_data['production_status']['completed']}%
+        - Em Andamento: {charts_data['production_status']['in_progress']}%
+        - Atrasados: {charts_data['production_status']['delayed']}%
         
-        Por favor, analise estes dados e forneça insights estratégicos detalhados.
+        KPIs REAIS:
+        - Ticket Médio: R$ {charts_data['kpis']['average_ticket']:,.2f}
+        
+        CONTEXTO: Estes são dados REAIS da Helibombas para julho de 2025. Por favor, analise estes dados reais e forneça insights estratégicos específicos baseados na performance real da empresa.
         """
 
         user_message = UserMessage(text=analysis_prompt)
