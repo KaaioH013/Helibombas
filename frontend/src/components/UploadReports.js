@@ -15,28 +15,6 @@ const UploadReports = ({ onUploadSuccess }) => {
   const [uploadResult, setUploadResult] = useState(null);
   const [error, setError] = useState(null);
 
-  const onDrop530 = useCallback((acceptedFiles) => {
-    console.log('onDrop530 called with files:', acceptedFiles);
-    if (acceptedFiles.length > 0) {
-      console.log('Setting report_530 file:', acceptedFiles[0]);
-      setFiles(prev => ({ ...prev, report_530: acceptedFiles[0] }));
-      setError(null);
-    } else {
-      console.log('No files accepted for report 530');
-    }
-  }, []);
-
-  const onDrop549 = useCallback((acceptedFiles) => {
-    console.log('onDrop549 called with files:', acceptedFiles);
-    if (acceptedFiles.length > 0) {
-      console.log('Setting report_549 file:', acceptedFiles[0]);
-      setFiles(prev => ({ ...prev, report_549: acceptedFiles[0] }));
-      setError(null);
-    } else {
-      console.log('No files accepted for report 549');
-    }
-  }, []);
-
   // Fallback file input handlers
   const handleFileInput530 = (e) => {
     const selectedFile = e.target.files[0];
@@ -57,54 +35,6 @@ const UploadReports = ({ onUploadSuccess }) => {
       setError(null);
     }
   };
-
-  const {
-    getRootProps: getRootProps530,
-    getInputProps: getInputProps530,
-    isDragActive: isDragActive530,
-    open: open530
-  } = useDropzone({
-    onDrop: onDrop530,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'application/vnd.ms-excel': ['.xls'],
-      '.pdf': [],
-      '.xlsx': [],
-      '.xls': []
-    },
-    multiple: false,
-    noClick: false,
-    noKeyboard: false,
-    onDropRejected: (rejectedFiles) => {
-      console.log('Files rejected for 530:', rejectedFiles);
-      setError('Formato de arquivo não suportado. Use PDF ou Excel.');
-    }
-  });
-
-  const {
-    getRootProps: getRootProps549,
-    getInputProps: getInputProps549,
-    isDragActive: isDragActive549,
-    open: open549
-  } = useDropzone({
-    onDrop: onDrop549,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'application/vnd.ms-excel': ['.xls'],
-      '.pdf': [],
-      '.xlsx': [],
-      '.xls': []
-    },
-    multiple: false,
-    noClick: false,
-    noKeyboard: false,
-    onDropRejected: (rejectedFiles) => {
-      console.log('Files rejected for 549:', rejectedFiles);
-      setError('Formato de arquivo não suportado. Use PDF ou Excel.');
-    }
-  });
 
   const handleUpload = async () => {
     if (!files.report_530 || !files.report_549 || !monthYear) {
