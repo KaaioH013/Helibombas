@@ -105,8 +105,18 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
                     str_key = str(key)
                     
                     # Convert datetime values to strings
-                    if isinstance(value, pd.Timestamp) or hasattr(value, 'strftime'):
-                        processed_record[str_key] = value.strftime('%Y-%m-%d %H:%M:%S') if hasattr(value, 'strftime') else str(value)
+                    if pd.isna(value):
+                        processed_record[str_key] = ""
+                    elif isinstance(value, pd.Timestamp):
+                        try:
+                            processed_record[str_key] = value.strftime('%Y-%m-%d %H:%M:%S')
+                        except:
+                            processed_record[str_key] = str(value)
+                    elif hasattr(value, 'strftime'):
+                        try:
+                            processed_record[str_key] = value.strftime('%Y-%m-%d %H:%M:%S')
+                        except:
+                            processed_record[str_key] = str(value)
                     else:
                         processed_record[str_key] = value
                 processed_records.append(processed_record)
