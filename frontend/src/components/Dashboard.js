@@ -156,24 +156,36 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
           {/* Distribuição Geográfica */}
           <div className="chart-container">
             <h3 className="chart-title">Distribuição Geográfica</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={charts_data.geographic_distribution}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={({ state, percentage }) => `${state}: ${percentage}%`}
-                >
-                  {charts_data.geographic_distribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value) => formatCurrency(value)} />
-              </PieChart>
-            </ResponsiveContainer>
+            {charts_data.geographic_distribution && charts_data.geographic_distribution[0].state !== "Dados não disponíveis" ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={charts_data.geographic_distribution}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ state, percentage }) => `${state}: ${percentage}%`}
+                  >
+                    {charts_data.geographic_distribution.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => formatCurrency(value)} />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '4rem 2rem',
+                color: 'var(--text-secondary)'
+              }}>
+                <Package size={48} style={{ marginBottom: '1rem', opacity: 0.3 }} />
+                <h4>Distribuição Geográfica Não Disponível</h4>
+                <p>Os dados do Relatório 549 são necessários para exibir a distribuição por estados.</p>
+              </div>
+            )}
           </div>
 
           {/* Status da Produção */}
