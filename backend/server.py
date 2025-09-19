@@ -560,7 +560,13 @@ async def upload_reports(
 async def get_analyses():
     """Get all report analyses"""
     analyses = await db.report_analyses.find().sort("created_at", -1).to_list(100)
-    return analyses
+    # Remove _id fields and prepare for serialization
+    cleaned_analyses = []
+    for analysis in analyses:
+        if '_id' in analysis:
+            del analysis['_id']
+        cleaned_analyses.append(analysis)
+    return cleaned_analyses
 
 @api_router.get("/analyses/{analysis_id}")
 async def get_analysis(analysis_id: str):
