@@ -5,7 +5,7 @@ import './App.css';
 
 // Components
 import Dashboard from './components/Dashboard';
-import UploadReports from './components/UploadReports';
+import UploadReports from './components/UploadReportsSimple';
 import MetaConfig from './components/MetaConfig';
 import Navbar from './components/Navbar';
 
