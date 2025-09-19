@@ -54,8 +54,16 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
     return `${value.toFixed(1)}%`;
   };
 
-  // Cores para os gráficos
-  const COLORS = ['#5A9B5C', '#4a834c', '#6bb46d', '#78c47a', '#2d4a2e'];
+  // Cores diversificadas para os gráficos (mantendo tema profissional)
+  const COLORS = ['#2563eb', '#dc2626', '#d97706', '#059669', '#7c3aed', '#be185d', '#0891b2', '#ca8a04'];
+  const CHART_COLORS = {
+    primary: '#2563eb',      // Azul
+    secondary: '#059669',    // Verde (Helibombas)
+    tertiary: '#dc2626',     // Vermelho
+    warning: '#d97706',      // Laranja
+    success: '#059669',      // Verde
+    info: '#0891b2'          // Azul claro
+  };
 
   return (
     <div className="page-container">
