@@ -294,16 +294,28 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
           {/* Análise de Produtos */}
           <div className="chart-container">
             <h3 className="chart-title">Análise de Produtos</h3>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={charts_data.product_analysis}>
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart 
+                data={charts_data.product_analysis} 
+                margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="product" angle={-45} textAnchor="end" height={80} fontSize={12} />
+                <XAxis 
+                  dataKey="product" 
+                  angle={-45} 
+                  textAnchor="end" 
+                  height={100} 
+                  fontSize={12}
+                  interval={0}
+                  tick={{ fontSize: 11 }}
+                />
                 <YAxis 
                   tickFormatter={(value) => {
                     if (value >= 1000000) return `R$ ${(value/1000000).toFixed(1)}M`;
                     if (value >= 1000) return `R$ ${(value/1000).toFixed(0)}K`;
                     return formatCurrency(value);
                   }}
+                  width={80}
                 />
                 <Tooltip 
                   formatter={(value, name) => [formatCurrency(value), name === 'revenue' ? 'Receita' : name]}
