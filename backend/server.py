@@ -16,30 +16,23 @@ import pandas as pd
 import fitz  # PyMuPDF
 import openpyxl
 # from emergentintegrations.llm.chat import LlmChat, UserMessage
-
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
-
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
-
 # Create the main app without a prefix
 app = FastAPI()
-
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
-
 # Models
 class MetaConfig(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     meta_value: float
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
 class MetaConfigCreate(BaseModel):
     meta_value: float
-
 class ReportAnalysis(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     month_year: str
@@ -48,10 +41,8 @@ class ReportAnalysis(BaseModel):
     ai_analysis: Dict[str, Any]
     charts_data: Dict[str, Any]
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
 class ReportAnalysisCreate(BaseModel):
     month_year: str
-
 # Helper functions
 def extract_pdf_data(file_content: bytes) -> Dict[str, Any]:
     """Extract data from PDF content"""
@@ -70,7 +61,6 @@ def extract_pdf_data(file_content: bytes) -> Dict[str, Any]:
         }
     except Exception as e:
         return {"error": str(e), "success": False}
-
 def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
     """Extract data from Excel content"""
     try:
@@ -124,7 +114,6 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
         import traceback
         traceback.print_exc()
         return {"error": str(e), "success": False}
-
 def prepare_for_mongo(data):
     """Prepare data for MongoDB by converting datetime objects to ISO strings"""
     import pandas as pd
@@ -151,7 +140,6 @@ def prepare_for_mongo(data):
         return data.item()  # Convert numpy types to native Python types
     else:
         return data
-
 def process_real_data(report_530_data: Dict, report_549_data: Dict, meta_target: float) -> Dict[str, Any]:
     """Process real Helibombas data from reports 530 and 549"""
     try:
@@ -333,7 +321,6 @@ def process_real_data(report_530_data: Dict, report_549_data: Dict, meta_target:
     except Exception as e:
         print(f"Error processing real data: {e}")
         return generate_mock_chart_data()  # Fallback to mock data
-
 def generate_mock_chart_data() -> Dict[str, Any]:
     """Generate mock chart data for demonstration"""
     return {
@@ -382,107 +369,39 @@ def generate_mock_chart_data() -> Dict[str, Any]:
             "sales_cycle": 18
         }
     }
-
 def format_sellers_for_ai(sellers):
     """Format sellers data for AI analysis"""
     result = ""
     for i, seller in enumerate(sellers, 1):
         result += f"{i}. {seller['name']}: R$ {seller['sales']:,.2f}\n"
     return result
-
 def format_clients_for_ai(clients):
     """Format clients data for AI analysis"""
     result = ""
     for i, client in enumerate(clients, 1):
         result += f"{i}. {client['client']}: R$ {client['value']:,.2f} ({client['percentage']}%)\n"
     return result
-
 def format_geography_for_ai(geo):
     """Format geographic data for AI analysis"""
     result = ""
     for i, state in enumerate(geo, 1):
         result += f"{i}. {state['state']}: R$ {state['value']:,.2f} ({state['percentage']}%)\n"
     return result
-
 def format_products_for_ai(products):
     """Format products data for AI analysis"""
     result = ""
     for i, product in enumerate(products, 1):
         result += f"{i}. {product['product']}: R$ {product['revenue']:,.2f} (Qtd: {product['quantity']})\n"
     return result
-
 async def analyze_with_ai(report_530_data: Dict, report_549_data: Dict, charts_data: Dict) -> Dict[str, Any]:
     return {
         "ai_insights": "Análise automática não disponível no momento.",
         "success": False
     }
-        # Initialize LLM Chat
-        chat = LlmChat(
-            api_key=os.environ.get('EMERGENT_LLM_KEY'),
-            session_id=f"analysis_{uuid.uuid4()}",
-            system_message="""Você é um coordenador comercial/vendas experiente da Helibombas. 
-            Analise os dados de vendas fornecidos e gere insights estratégicos detalhados.
-            
-            Sua análise deve incluir:
-            1. Performance geral vs meta
-            2. Pontos fortes e fracos
-            3. Oportunidades de crescimento
-            4. Recomendações estratégicas
-            5. Plano de ação para o próximo mês
-            
-            Use formatação em português brasileiro e valores em R$.
-            Seja específico e prático nas recomendações."""
-        ).with_model("openai", "gpt-4o")
-
-        # Prepare analysis data with REAL values
-        analysis_prompt = f"""
-        DADOS DE VENDAS REAIS HELIBOMBAS - JULHO 2025:
-        
-        Performance vs Meta: R$ {charts_data['performance_vs_meta']['current_performance']:,.2f} / R$ {charts_data['performance_vs_meta']['meta_target']:,.2f} ({charts_data['performance_vs_meta']['percentage']}%)
-        
-        VENDEDORES EXTERNOS REAIS:
-        {format_sellers_for_ai(charts_data['external_sellers'])}
-        
-        PRINCIPAIS CLIENTES REAIS:
-        {format_clients_for_ai(charts_data['main_clients'])}
-        
-        DISTRIBUIÇÃO GEOGRÁFICA REAL:
-        {format_geography_for_ai(charts_data['geographic_distribution'])}
-        
-        ANÁLISE DE PRODUTOS REAIS:
-        {format_products_for_ai(charts_data['product_analysis'])}
-        
-        STATUS DE PRODUÇÃO:
-        - Finalizados: {charts_data['production_status']['completed']}%
-        - Em Andamento: {charts_data['production_status']['in_progress']}%
-        - Atrasados: {charts_data['production_status']['delayed']}%
-        
-        KPIs REAIS:
-        - Ticket Médio: R$ {charts_data['kpis']['average_ticket']:,.2f}
-        
-        CONTEXTO: Estes são dados REAIS da Helibombas para julho de 2025. Por favor, analise estes dados reais e forneça insights estratégicos específicos baseados na performance real da empresa.
-        """
-
-        user_message = UserMessage(text=analysis_prompt)
-        response = await chat.send_message(user_message)
-        
-        return {
-            "ai_insights": response,
-            "analysis_timestamp": datetime.now(timezone.utc).isoformat(),
-            "success": True
-        }
-    except Exception as e:
-        return {
-            "error": str(e),
-            "success": False,
-            "ai_insights": "Análise automática não disponível no momento."
-        }
-
 # API Routes
 @api_router.get("/")
 async def root():
     return {"message": "Dashboard de Relatórios Helibombas - API"}
-
 @api_router.post("/meta-config", response_model=MetaConfig)
 async def create_meta_config(input: MetaConfigCreate):
     """Configure meta target value"""
@@ -491,7 +410,6 @@ async def create_meta_config(input: MetaConfigCreate):
     meta_dict_for_mongo = prepare_for_mongo(meta_obj.dict())
     await db.meta_configs.insert_one(meta_dict_for_mongo)
     return meta_obj
-
 @api_router.get("/meta-config")
 async def get_current_meta():
     """Get current meta configuration"""
@@ -503,7 +421,6 @@ async def get_current_meta():
             del meta_doc['_id']
         return meta_doc
     return {"meta_value": 2200000.0}  # Default meta
-
 @api_router.post("/upload-reports")
 async def upload_reports(
     month_year: str = Form(...),
@@ -562,7 +479,6 @@ async def upload_reports(
     except Exception as e:
         logging.error(f"Error processing reports: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Erro ao processar relatórios: {str(e)}")
-
 @api_router.get("/analyses")
 async def get_analyses():
     """Get all report analyses"""
@@ -574,7 +490,6 @@ async def get_analyses():
             del analysis['_id']
         cleaned_analyses.append(analysis)
     return cleaned_analyses
-
 @api_router.get("/analyses/{analysis_id}")
 async def get_analysis(analysis_id: str):
     """Get specific analysis"""
@@ -586,10 +501,8 @@ async def get_analysis(analysis_id: str):
     if '_id' in analysis:
         del analysis['_id']
     return analysis
-
 # Include the router in the main app
 app.include_router(api_router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -597,14 +510,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
