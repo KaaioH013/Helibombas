@@ -231,12 +231,23 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
             Ranking Vendedores Externos
           </h3>
           {charts_data.external_sellers && charts_data.external_sellers.length > 0 && charts_data.external_sellers[0].name !== "Sem dados vendedor externo" ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={charts_data.external_sellers} layout="horizontal">
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={charts_data.external_sellers} layout="horizontal" margin={{ top: 20, right: 30, left: 120, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" tickFormatter={(value) => formatCurrency(value)} />
+                <XAxis 
+                  type="number" 
+                  tickFormatter={(value) => {
+                    if (value >= 1000000) return `R$ ${(value/1000000).toFixed(1)}M`;
+                    if (value >= 1000) return `R$ ${(value/1000).toFixed(0)}K`;
+                    return formatCurrency(value);
+                  }}
+                  domain={[0, 'dataMax']}
+                />
                 <YAxis dataKey="name" type="category" width={120} />
-                <Tooltip formatter={(value) => formatCurrency(value)} />
+                <Tooltip 
+                  formatter={(value) => [formatCurrency(value), 'Vendas']}
+                  labelFormatter={(label) => `Vendedor: ${label}`}
+                />
                 <Bar dataKey="sales" fill={CHART_COLORS.secondary} radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
