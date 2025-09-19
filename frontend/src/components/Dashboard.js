@@ -214,9 +214,9 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
                   dataKey="value"
                   label={({ name, value }) => `${name}: ${value}%`}
                 >
-                  <Cell fill="#48bb78" />
-                  <Cell fill="#ed8936" />
-                  <Cell fill="#f56565" />
+                  <Cell fill={CHART_COLORS.success} />
+                  <Cell fill={CHART_COLORS.warning} />
+                  <Cell fill={CHART_COLORS.tertiary} />
                 </Pie>
                 <Tooltip />
               </PieChart>
