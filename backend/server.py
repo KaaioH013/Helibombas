@@ -334,6 +334,34 @@ def generate_mock_chart_data() -> Dict[str, Any]:
         }
     }
 
+def format_sellers_for_ai(sellers):
+    """Format sellers data for AI analysis"""
+    result = ""
+    for i, seller in enumerate(sellers, 1):
+        result += f"{i}. {seller['name']}: R$ {seller['sales']:,.2f}\n"
+    return result
+
+def format_clients_for_ai(clients):
+    """Format clients data for AI analysis"""
+    result = ""
+    for i, client in enumerate(clients, 1):
+        result += f"{i}. {client['client']}: R$ {client['value']:,.2f} ({client['percentage']}%)\n"
+    return result
+
+def format_geography_for_ai(geo):
+    """Format geographic data for AI analysis"""
+    result = ""
+    for i, state in enumerate(geo, 1):
+        result += f"{i}. {state['state']}: R$ {state['value']:,.2f} ({state['percentage']}%)\n"
+    return result
+
+def format_products_for_ai(products):
+    """Format products data for AI analysis"""
+    result = ""
+    for i, product in enumerate(products, 1):
+        result += f"{i}. {product['product']}: R$ {product['revenue']:,.2f} (Qtd: {product['quantity']})\n"
+    return result
+
 async def analyze_with_ai(report_530_data: Dict, report_549_data: Dict, charts_data: Dict) -> Dict[str, Any]:
     """Analyze data using AI as commercial coordinator"""
     try:
