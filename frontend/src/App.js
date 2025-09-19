@@ -18,15 +18,19 @@ function App() {
   const [metaConfig, setMetaConfig] = useState({ meta_value: 2200000 });
 
   useEffect(() => {
+    console.log('App useEffect - fetching data');
     fetchAnalyses();
     fetchMetaConfig();
   }, []);
 
   const fetchAnalyses = async () => {
     try {
+      console.log('Fetching analyses from API...');
       const response = await axios.get(`${API}/analyses`);
+      console.log('Analyses response:', response.data);
       setAnalyses(response.data);
       if (response.data.length > 0) {
+        console.log('Setting current analysis to:', response.data[0]);
         setCurrentAnalysis(response.data[0]);
       }
     } catch (error) {
