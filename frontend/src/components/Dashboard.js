@@ -203,9 +203,9 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
               <PieChart>
                 <Pie
                   data={[
-                    { name: 'Concluído', value: charts_data.production_status.completed, color: '#48bb78' },
-                    { name: 'Em Andamento', value: charts_data.production_status.in_progress, color: '#ed8936' },
-                    { name: 'Atrasado', value: charts_data.production_status.delayed, color: '#f56565' }
+                    { name: 'Concluído', value: charts_data.production_status.completed, color: CHART_COLORS.success },
+                    { name: 'Em Andamento', value: charts_data.production_status.in_progress, color: CHART_COLORS.warning },
+                    { name: 'Atrasado', value: charts_data.production_status.delayed, color: CHART_COLORS.tertiary }
                   ]}
                   cx="50%"
                   cy="50%"
