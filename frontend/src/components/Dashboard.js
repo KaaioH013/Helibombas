@@ -210,15 +210,27 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
             <Users size={24} style={{ marginRight: '0.5rem', color: 'var(--primary-color)' }} />
             Ranking Vendedores Externos
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={charts_data.external_sellers} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" tickFormatter={(value) => formatCurrency(value)} />
-              <YAxis dataKey="name" type="category" width={120} />
-              <Tooltip formatter={(value) => formatCurrency(value)} />
-              <Bar dataKey="sales" fill="#5A9B5C" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          {charts_data.external_sellers && charts_data.external_sellers.length > 0 && charts_data.external_sellers[0].name !== "Sem dados vendedor externo" ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={charts_data.external_sellers} layout="horizontal">
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" tickFormatter={(value) => formatCurrency(value)} />
+                <YAxis dataKey="name" type="category" width={120} />
+                <Tooltip formatter={(value) => formatCurrency(value)} />
+                <Bar dataKey="sales" fill="#5A9B5C" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '4rem 2rem',
+              color: 'var(--text-secondary)'
+            }}>
+              <Users size={48} style={{ marginBottom: '1rem', opacity: 0.3 }} />
+              <h4>Dados de Vendedores Externos Não Disponíveis</h4>
+              <p>Os dados do Relatório 549 são necessários para exibir o ranking de vendedores externos.</p>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-2" style={{ marginBottom: '2rem' }}>
