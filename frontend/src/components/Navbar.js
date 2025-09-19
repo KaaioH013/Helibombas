@@ -11,7 +11,22 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="container">
         <div className="navbar-content">
-          <Link to="/" className="navbar-brand">
+          <Link to="/" className="navbar-brand" style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ 
+              width: '32px', 
+              height: '32px', 
+              backgroundColor: '#5A9B5C',
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: '0.75rem',
+              fontWeight: 'bold',
+              color: 'white',
+              fontSize: '18px'
+            }}>
+              HB
+            </div>
             Helibombas Dashboard
           </Link>
           <ul className="navbar-nav">
