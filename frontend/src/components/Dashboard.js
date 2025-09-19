@@ -232,23 +232,36 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
           </h3>
           {charts_data.external_sellers && charts_data.external_sellers.length > 0 && charts_data.external_sellers[0].name !== "Sem dados vendedor externo" ? (
             <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={charts_data.external_sellers} layout="horizontal" margin={{ top: 20, right: 30, left: 120, bottom: 5 }}>
+              <BarChart 
+                data={charts_data.external_sellers} 
+                margin={{ top: 20, right: 30, left: 20, bottom: 80 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
-                  type="number" 
+                  dataKey="name" 
+                  angle={-45} 
+                  textAnchor="end" 
+                  height={80} 
+                  fontSize={12}
+                  interval={0}
+                />
+                <YAxis 
                   tickFormatter={(value) => {
                     if (value >= 1000000) return `R$ ${(value/1000000).toFixed(1)}M`;
                     if (value >= 1000) return `R$ ${(value/1000).toFixed(0)}K`;
                     return formatCurrency(value);
                   }}
-                  domain={[0, 'dataMax']}
+                  width={80}
                 />
-                <YAxis dataKey="name" type="category" width={120} />
                 <Tooltip 
                   formatter={(value) => [formatCurrency(value), 'Vendas']}
                   labelFormatter={(label) => `Vendedor: ${label}`}
                 />
-                <Bar dataKey="sales" fill={CHART_COLORS.secondary} radius={[0, 4, 4, 0]} />
+                <Bar dataKey="sales" fill={CHART_COLORS.secondary} radius={[4, 4, 0, 0]}>
+                  {charts_data.external_sellers.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={CHART_COLORS.secondary} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           ) : (
