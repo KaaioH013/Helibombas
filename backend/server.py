@@ -82,6 +82,9 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
         # Convert all sheets to dictionary format
         data = {}
         for sheet_name, sheet_df in df.items():
+            # First, rename any datetime columns to string
+            sheet_df.columns = [col.strftime('%Y-%m-%d %H:%M:%S') if hasattr(col, 'strftime') else str(col) for col in sheet_df.columns]
+            
             # Convert to dict and handle NaN values and datetime objects
             sheet_dict = sheet_df.fillna("").to_dict(orient='records')
             # Convert any datetime objects to strings
@@ -89,11 +92,8 @@ def extract_excel_data(file_content: bytes) -> Dict[str, Any]:
             for record in sheet_dict:
                 processed_record = {}
                 for key, value in record.items():
-                    # Ensure key is string and handle datetime keys
-                    if hasattr(key, 'strftime'):  # datetime key
-                        str_key = key.strftime('%Y-%m-%d %H:%M:%S')
-                    else:
-                        str_key = str(key)
+                    # Key should already be string at this point
+                    str_key = str(key)
                     
                     # Convert datetime values to strings
                     if isinstance(value, pd.Timestamp) or hasattr(value, 'strftime'):
