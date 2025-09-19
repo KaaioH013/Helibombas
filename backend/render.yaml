@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: helibombas
+    env: python
+    buildCommand: ""
+    startCommand: ""
+    pythonVersion: 3.10
