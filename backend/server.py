@@ -175,48 +175,62 @@ def process_real_data(report_530_data: Dict, report_549_data: Dict, meta_target:
         # Calculate real performance vs meta
         total_vendas_530 = sum(float(row.get('Vlr.Total', 0)) for row in data_530 if row.get('Vlr.Total'))
         
-        # Get real external sellers from 549
+        # Get real external sellers from 549 (if available)
         vendedores_externos = {}
-        for row in data_549:
-            vendedor = row.get('VENDEDOR EXTERNO')
-            valor = row.get('VLR. TOTAL', 0)
-            if vendedor and vendedor != 'HELIBOMBAS' and valor:  # Exclude HELIBOMBAS as it's internal
-                valor = float(valor) if valor else 0
-                if vendedor in vendedores_externos:
-                    vendedores_externos[vendedor] += valor
-                else:
-                    vendedores_externos[vendedor] = valor
+        if data_549:
+            for row in data_549:
+                vendedor = row.get('VENDEDOR EXTERNO')
+                valor = row.get('VLR. TOTAL', 0)
+                if vendedor and vendedor != 'HELIBOMBAS' and valor:  # Exclude HELIBOMBAS as it's internal
+                    valor = float(valor) if valor else 0
+                    if vendedor in vendedores_externos:
+                        vendedores_externos[vendedor] += valor
+                    else:
+                        vendedores_externos[vendedor] = valor
         
-        # Format external sellers for chart
+        # Format external sellers for chart (with fallback data if no 549 data)
         external_sellers = []
-        for vendedor, valor in sorted(vendedores_externos.items(), key=lambda x: x[1], reverse=True)[:5]:
-            external_sellers.append({
-                "name": vendedor,
-                "sales": valor,
-                "growth": 0  # Would need historical data for real growth
-            })
+        if vendedores_externos:
+            for vendedor, valor in sorted(vendedores_externos.items(), key=lambda x: x[1], reverse=True)[:5]:
+                external_sellers.append({
+                    "name": vendedor,
+                    "sales": valor,
+                    "growth": 0  # Would need historical data for real growth
+                })
+        else:
+            # Use mock data for external sellers if no 549 data
+            external_sellers = [
+                {"name": "Sem dados vendedor externo", "sales": 0, "growth": 0}
+            ]
         
-        # Get real geographic distribution from 549
+        # Get real geographic distribution from 549 (if available)
         estados_vendas = {}
-        for row in data_549:
-            estado = row.get('UF')
-            valor = row.get('VLR. TOTAL', 0)
-            if estado and valor:
-                valor = float(valor) if valor else 0
-                if estado in estados_vendas:
-                    estados_vendas[estado] += valor
-                else:
-                    estados_vendas[estado] = valor
+        if data_549:
+            for row in data_549:
+                estado = row.get('UF')
+                valor = row.get('VLR. TOTAL', 0)
+                if estado and valor:
+                    valor = float(valor) if valor else 0
+                    if estado in estados_vendas:
+                        estados_vendas[estado] += valor
+                    else:
+                        estados_vendas[estado] = valor
         
-        total_geographic = sum(estados_vendas.values()) if estados_vendas else 1
         geographic_distribution = []
-        for estado, valor in sorted(estados_vendas.items(), key=lambda x: x[1], reverse=True)[:5]:
-            percentage = (valor / total_geographic) * 100 if total_geographic > 0 else 0
-            geographic_distribution.append({
-                "state": estado,
-                "value": valor,
-                "percentage": round(percentage, 1)
-            })
+        if estados_vendas:
+            total_geographic = sum(estados_vendas.values()) if estados_vendas else 1
+            for estado, valor in sorted(estados_vendas.items(), key=lambda x: x[1], reverse=True)[:5]:
+                percentage = (valor / total_geographic) * 100 if total_geographic > 0 else 0
+                geographic_distribution.append({
+                    "state": estado,
+                    "value": valor,
+                    "percentage": round(percentage, 1)
+                })
+        else:
+            # Mock geographic data if no 549 data
+            geographic_distribution = [
+                {"state": "Dados não disponíveis", "value": total_vendas_530, "percentage": 100.0}
+            ]
         
         # Get real main clients from 530
         clientes_vendas = {}
