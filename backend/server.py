@@ -165,9 +165,12 @@ def process_real_data(report_530_data: Dict, report_549_data: Dict, meta_target:
         data_549 = report_549_data.get('sheets', {}).get('Planilha1', [])
         print(f"Data 549 records: {len(data_549)}")
         
-        if not data_530 or not data_549:
-            print("No data found, using mock data")
+        if not data_530:
+            print("No data 530 found, using mock data")
             return generate_mock_chart_data()  # Fallback to mock data
+        
+        if not data_549:
+            print("No data 549 found, will process with 530 data only")
         
         # Calculate real performance vs meta
         total_vendas_530 = sum(float(row.get('Vlr.Total', 0)) for row in data_530 if row.get('Vlr.Total'))
