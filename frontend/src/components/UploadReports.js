@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import { Upload, FileText, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
