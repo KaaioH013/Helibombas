@@ -155,7 +155,7 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
               <XAxis dataKey="name" />
               <YAxis tickFormatter={(value) => `R$ ${(value / 1000)}K`} />
               <Tooltip formatter={(value) => formatCurrency(value)} />
-              <Bar dataKey="value" fill="#5A9B5C" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill={CHART_COLORS.primary} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
