@@ -298,7 +298,7 @@ const Dashboard = ({ analysis, metaConfig, analyses, onAnalysisSelect }) => {
                   formatter={(value, name) => [formatCurrency(value), name === 'revenue' ? 'Receita' : name]}
                   labelFormatter={(label) => `Produto: ${label}`}
                 />
-                <Bar dataKey="revenue" fill="#5A9B5C" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="revenue" fill={CHART_COLORS.warning} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
