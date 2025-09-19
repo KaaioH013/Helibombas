@@ -15,7 +15,7 @@ import json
 import pandas as pd
 import fitz  # PyMuPDF
 import openpyxl
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -412,8 +412,10 @@ def format_products_for_ai(products):
     return result
 
 async def analyze_with_ai(report_530_data: Dict, report_549_data: Dict, charts_data: Dict) -> Dict[str, Any]:
-    """Analyze data using AI as commercial coordinator"""
-    try:
+    return {
+        "ai_insights": "Análise automática não disponível no momento.",
+        "success": False
+    }
         # Initialize LLM Chat
         chat = LlmChat(
             api_key=os.environ.get('EMERGENT_LLM_KEY'),
